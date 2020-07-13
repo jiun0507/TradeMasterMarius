@@ -5,7 +5,7 @@ from reply_texts import (
     reply,
     button_text,
 )
-
+from tictac import run
 
 class message_handler:
     def __init__(self, bot):
@@ -23,30 +23,34 @@ class message_handler:
             updates = updates["result"]
             if updates:
                 for item in updates:
-                    reply_markup = None
                     update_id = item["update_id"]
                     try:
                         message = str(item["message"]["text"])
                     except:
-                        message = None
+                        raise ValueError
                     from_ = item["message"]["from"]["id"]
                     telegram_id = from_
+                    order = message.split('/')
+                    symbol = order[0]
+                    quantity = order[1]
+                    print(symbol, quantity)
+                    run(
+                        order_symbol=symbol,
+                        order_quantity=quantity,
+                        api_id=self.bot.alpaca_api_id,
+                        api_key=self.bot.alpaca_key,
+                        url=self.bot.alpaca_paper_url,
+                    )
                     message = self.bot.get_account_info(api=self.bot.alpaca_api)
-                    
-                    self.bot.send_full_message(self.bot.token, message, from_, reply_markup=reply_markup)
+                    self.bot.send_message(message, self.bot.bot_id)
                     updates = self.bot.get_updates(offset=update_id)
         except (requests.exceptions.Timeout, ValueError):
             if telegram_id == -1:
                 message = reply.no_work.value
             else:
                 message = reply.sleep.value
-            options = []
-            options.append(button_text.wake_up.value)
 
-            urls = []
-            urls.append(self.bot.wake_up_url)
-            inline_reply_markup = self.bot.get_inline_reply_markup_with_urls(options=options,urls=urls)
-            self.bot.send_full_message(self.bot.token, message, self.bot.bot_id, reply_markup=inline_reply_markup)
+            self.bot.send_message(message, self.bot.bot_id)
             return response
 
         return response
