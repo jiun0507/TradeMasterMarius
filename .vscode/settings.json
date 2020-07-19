@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "/Users/bob/.local/share/virtualenvs/TradeMasterMarius-ezQ5KIcu/bin/python",
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Enabled": false,
+    "python.linting.enabled": true
+}

@@ -5,15 +5,15 @@ import configparser as cfg
 from telebot import (
     apihelper,
     handler_backends,
-    types, 
+    types,
     util,
 )
 from reply_texts import reply
 import alpaca_trade_api as tradeapi
-from tictac import run
+
 
 class alpaca_bot:
-    def get_account_info(self, api):
+    def get_balance_info(self, api):
         # Get our account information.
         account = api.get_account()
 
@@ -35,12 +35,8 @@ class telegram_chatbot(alpaca_bot):
         self.domain = self.read_key_from_config_file(config, 'domain')
         self.base = "{}{}/".format(self.domain, self.token)
         self.alpaca_paper_url = self.read_key_from_config_file(config, 'alpaca_paper_url')
-        self.alpaca_api = tradeapi.REST(        
-            self.alpaca_api_id,
-            self.alpaca_key,
-            'https://paper-api.alpaca.markets',
-            api_version='v2',
-        )
+        self.alpaca_api = tradeapi.REST(self.alpaca_api_id, self.alpaca_key, 'https://paper-api.alpaca.markets', api_version='v2')
+        self.fmp_api_key = self.read_key_from_config_file(config, 'fmp_api_key')
 
     def get_updates(self, offset=None):
         url = self.base + "getUpdates?timeout=100"
@@ -48,7 +44,6 @@ class telegram_chatbot(alpaca_bot):
             url = url + "&offset={}".format(offset + 1)
         r = requests.get(url, timeout=3)
         return json.loads(r.content)
-
 
     def send_message(self, msg, chat_id):
         url = self.base + "sendMessage?chat_id={}&text={}".format(chat_id, msg)
