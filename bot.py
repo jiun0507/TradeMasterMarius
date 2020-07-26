@@ -12,6 +12,7 @@ from reply_texts import reply
 import alpaca_trade_api as tradeapi
 
 
+
 class alpaca_bot:
     def get_balance_info(self, api):
         # Get our account information.
@@ -21,6 +22,11 @@ class alpaca_bot:
         balance_change = float(account.equity) - float(account.last_equity)
         return 'Today\'s portfolio balance change:{}'.format(balance_change)
 
+    def get_polygon_financial_statement(self, api, symbol, limit):
+        params = {}
+        params['limit'] = limit
+        financial_statement = api.polygon.get(path='/reference/financials/'+symbol, params=params, version='v2')
+        return financial_statement
 
 class telegram_chatbot(alpaca_bot):
 
