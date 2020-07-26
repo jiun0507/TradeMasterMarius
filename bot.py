@@ -1,19 +1,19 @@
-import requests
-import json
 import configparser as cfg
+import json
 
-from telebot import (
-    apihelper,
-    handler_backends,
-    types,
-    util,
-)
-from reply_texts import reply
 import alpaca_trade_api as tradeapi
+import requests
+
+from keys import keys_class
+from reply_texts import reply
+from telebot import apihelper, handler_backends, types, util
 
 
+class alpaca_bot(keys_class):
+    def __init__(self, config):
+        super().__init__(config)
+        self.alpaca_api = tradeapi.REST(self.alpaca_api_id, self.alpaca_key, 'https://paper-api.alpaca.markets', api_version='v2')
 
-class alpaca_bot:
     def get_balance_info(self, api):
         # Get our account information.
         account = api.get_account()
@@ -22,27 +22,20 @@ class alpaca_bot:
         balance_change = float(account.equity) - float(account.last_equity)
         return 'Today\'s portfolio balance change:{}'.format(balance_change)
 
-    def get_polygon_financial_statement(self, api, symbol, limit):
+    def get_position_list(self):
+        positions = self.alpaca_api.list_positions()
+        return positions
+
+    def get_polygon_financial_statement(self, symbol, limit):
         params = {}
         params['limit'] = limit
-        financial_statement = api.polygon.get(path='/reference/financials/'+symbol, params=params, version='v2')
+        financial_statement = self.alpaca_api.polygon.get(path='/reference/financials/'+symbol, params=params, version='v2')
         return financial_statement
 
-class telegram_chatbot(alpaca_bot):
+class telegram_chatbot(keys_class):
 
     def __init__(self, config):
-        super().__init__()
-        self.token = self.read_key_from_config_file(config, 'token')
-        self.alpaca_api_id = self.read_key_from_config_file(config, 'alpaca_api_id')
-        self.alpaca_key = self.read_key_from_config_file(config, 'alpaca_key')
-
-        self.bot_id = self.read_key_from_config_file(config, 'bot_id')
-        self.wake_up_url = self.read_key_from_config_file(config, 'wake_up_url')
-        self.domain = self.read_key_from_config_file(config, 'domain')
-        self.base = "{}{}/".format(self.domain, self.token)
-        self.alpaca_paper_url = self.read_key_from_config_file(config, 'alpaca_paper_url')
-        self.alpaca_api = tradeapi.REST(self.alpaca_api_id, self.alpaca_key, 'https://paper-api.alpaca.markets', api_version='v2')
-        self.fmp_api_key = self.read_key_from_config_file(config, 'fmp_api_key')
+        super().__init__(config)
 
     def get_updates(self, offset=None):
         url = self.base + "getUpdates?timeout=100"
@@ -55,10 +48,3 @@ class telegram_chatbot(alpaca_bot):
         url = self.base + "sendMessage?chat_id={}&text={}".format(chat_id, msg)
         if msg is not None:
             requests.get(url)
-
-    def read_key_from_config_file(self, config, key):
-        parser = cfg.ConfigParser()
-        parser.read(config)
-        return parser.get('creds', key)
-
-
