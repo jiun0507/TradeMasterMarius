@@ -83,9 +83,9 @@ class FMPClient(object):
     class CompanyValuation(_Endpoint):
         """ FMP Company Profile API endpoints. """
         name = 'company_valuation'
-        
+
         def profile(self, tickers, params={}):
-            """ 
+            """
             Companies profile (Price, Beta, Volume Average, Market Capitalisation, 
             Last Dividend, 52 week range, stock price change, stock price change 
             in percentage, Company Name, Exchange, Description, Industry, Sector, 
@@ -95,7 +95,7 @@ class FMPClient(object):
             """
             params['datatype'] = 'json'
             return self._GET('company/profile', tickers, params)
-        
+
         def income_statement(self, tickers, period=None, datatype='json', params={}):
             """
             Get the tickers' income statments 
@@ -108,7 +108,7 @@ class FMPClient(object):
             if datatype in ['json', 'csv']:
                 params['datatype'] = datatype
             return self._GET('financials/income-statement', tickers, params)
-        
+
         def balance_sheet_statement(self, tickers, period=None, datatype='json', params={}):
             """
             Get the tickers' balance sheets
@@ -121,7 +121,7 @@ class FMPClient(object):
             if datatype in ['json', 'csv']:
                 params['datatype'] = datatype
             return self._GET('financials/balance-sheet-statement', tickers, params)
-        
+
         def cash_flow_statement(self, tickers, period=None, datatype='json', params={}):
             """
             Get the tickers' cash flow statements
@@ -134,14 +134,14 @@ class FMPClient(object):
             if datatype in ['json', 'csv']:
                 params['datatype'] = datatype
             return self._GET('financials/cash-flow-statement', tickers, params)
-        
+
         def financial_ratios(self, tickers, params={}):
             """
             Get the tickers' cash flow statements
             :param tickers: List. The tickers to query.
             """
             return self._GET('financial-ratios', tickers, params)
-        
+
         def enterprise_value(self, tickers, period=None, params={}):
             """
             Get the tickers' company enterprise value
@@ -152,7 +152,7 @@ class FMPClient(object):
             if 'quarter' == period:
                 params['period'] = 'quarter'
             return self._GET('enterprise-value', tickers, params)
-        
+
         def key_metrics(self, tickers, period=None, params={}):
             """
             Get the tickers' company key metrics
@@ -174,14 +174,14 @@ class FMPClient(object):
             if 'quarter' == period:
                 params['period'] = 'quarter'
             return self._GET('financial-growth', tickers, params)
-        
+
         def company_rating(self, tickers, params={}):
             """
             Get the tickers' ratings. Calculated daily.
             :param tickers: List. The tickers to query.
             """
             return self._GET('company/rating', tickers, params)
-        
+
         def discounted_cash_flow_value(self, tickers, params={}):
             """
             Get the tickers' discounted cash flow.
@@ -189,7 +189,7 @@ class FMPClient(object):
             :param tickers: List. The tickers to query.
             """
             return self._GET('company/discounted-cash-flow', tickers, params)
-        
+
         def historical_discounted_cash_flow_value(self, tickers, period=None, params={}):
             """
             Get the tickers' financial growth metrics
@@ -200,7 +200,7 @@ class FMPClient(object):
             if 'quarter' == period:
                 params['period'] = 'quarter'
             return self._GET('company/historical-discounted-cash-flow', tickers, params)
-    
+
     class StockTimeSeries(_Endpoint):
         """ FMP Stock Time Series API endpoints. """
         name = 'stock_time_series'
@@ -235,7 +235,7 @@ class FMPClient(object):
             return self._GET('historical-price-full', tickers, params)
 
         def symbols_list(self, params={}):
-            
+
             """
             Get all the available tickers on FMP.
             """
@@ -282,7 +282,7 @@ class FMPClient(object):
             Get the performance of each market sector.
             """
             return self._GET('sectors-performance', [], params)
-    
+
     class Cryptocurrencies(_Endpoint):
         """ FMP Cryptocurrencies API endpoints. """
         name = 'cryptocurrencies'

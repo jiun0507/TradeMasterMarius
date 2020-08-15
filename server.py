@@ -1,14 +1,24 @@
+from alpaca_use_case import AlpacaUseCase
+from handler import (TelegramInterface,
+                     AlpacaView)
+from alpaca_repository import AlpacaRepository
 import json
 
-import requests
-from bot import telegram_chatbot
-from handler import listen_view
-
-
-
-initial_handler = listen_view()
-
 def lambda_handler(event=None, context=None):
-    initial_handler.input_message()
+    telegram = TelegramInterface(".config.cfg")
+    requests = telegram.gather_messages()
 
+    for request in requests:
+        messages = []
+        if request == 'Alpa':
+            result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get()
+            messages.append(result)
+        if request == 'FS':
+            result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get_financial_statement()
+            messages.append(json.dumps(result))
+        if request == 'tickers':
+            result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get_polygon_ticker_symbols()
+            messages.append(json.dumps(result))
+        for message in messages:
+            telegram.send_full_message(text=message)
 lambda_handler()
