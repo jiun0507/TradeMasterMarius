@@ -11,5 +11,5 @@ class AlpacaUseCase:
     def get_positions(self):
         return self._repo.get_position_list()
 
-    def get_ticker_symbols(self):
-        return self._repo.get_polygon_supported_ticker_symbols()
+    def update_ticker_symbols(self):
+        return self._repo.get_polygon_supported_ticker_symbols(700)

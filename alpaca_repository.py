@@ -44,8 +44,8 @@ class AlpacaRepository:
         positions = self.api.list_positions()
         return positions
 
-    def get_polygon_supported_ticker_symbols(self):
-        for page in range(1, 10):
+    def get_polygon_supported_ticker_symbols(self, pages):
+        for page in range(1, 700):
             params = {
                 'market': 'STOCKS',
                 'page': page,
@@ -56,7 +56,7 @@ class AlpacaRepository:
             for ticker in tickers:
                 ticker_list.append((ticker['ticker'],))
             self.create_tickers(ticker_list)
-        return "Stored 500 tickers onto db."
+        return "Stored tickers onto db."
 
     def create_tickers(self, tickers: list):
         """
