@@ -45,16 +45,18 @@ class AlpacaRepository:
         return positions
 
     def get_polygon_supported_ticker_symbols(self):
-        params = {
-            'market': 'STOCKS',
-            'page': 1,
-        }
-        tickers = self.api.polygon.get(path='/reference/tickers', params=params, version='v2')['tickers']
-        ticker_list = []
-        for ticker in tickers:
-            ticker_list.append((ticker['ticker'],))
-        self.create_tickers(ticker_list)
-        return ticker_list
+        for page in range(1, 10):
+            params = {
+                'market': 'STOCKS',
+                'page': page,
+            }
+            data = self.api.polygon.get(path='/reference/tickers', params=params, version='v2')
+            tickers = data['tickers']
+            ticker_list = []
+            for ticker in tickers:
+                ticker_list.append((ticker['ticker'],))
+            self.create_tickers(ticker_list)
+        return "Stored 500 tickers onto db."
 
     def create_tickers(self, tickers: list):
         """
@@ -63,7 +65,6 @@ class AlpacaRepository:
         :param project:
         :return: project id
         """
-        print(tickers)
-        sql = ''' INSERT INTO Tickers(Symbol)
+        sql = ''' INSERT OR REPLACE INTO Tickers(Symbol)
                 VALUES(?) '''
         self.db.post_many(sql, tickers)

@@ -23,7 +23,6 @@ class sqlite:
 
 
     def post_many(self, sql, items):
-        print(items)
         try:
             conn = self.create_connection()
             cur = conn.cursor()
