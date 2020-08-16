@@ -38,7 +38,7 @@ class AlpacaRepository:
         params = {}
         params['limit'] = limit
         financial_statement = self.api.polygon.get(path='/reference/financials/'+symbol, params=params, version='v2')
-        return financial_statement
+        return financial_statement['results']
 
     def get_position_list(self):
         positions = self.api.list_positions()

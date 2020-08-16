@@ -128,8 +128,8 @@ class AlpacaView(BaseView):
     def get(self):
         return self.use_case.get()
 
-    def get_financial_statement(self):
-        return self.use_case.get_financial_statement()
+    def get_financial_statement(self, ticker):
+        return self.use_case.get_financial_statement(ticker)
 
     def get_polygon_ticker_symbols(self):
         return self.use_case.get_ticker_symbols()

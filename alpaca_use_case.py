@@ -5,7 +5,6 @@ class AlpacaUseCase:
         return self._repo.get_account_info()
 
     def get_financial_statement(self, symbol=None):
-        symbol = 'AAPL'
         return self._repo.get_polygon_financial_statement(symbol=symbol, limit=1)
 
     def get_positions(self):
