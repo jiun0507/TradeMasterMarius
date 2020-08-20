@@ -1,5 +1,6 @@
 import sqlite3
 from sqlite3 import Error
+from pypika import Query, Table, Field
 
 class sqlite:
     def __init__(self, db_file):
@@ -37,3 +38,20 @@ class sqlite:
             if (conn):
                 conn.close()
                 print("The SQLite connection is closed")
+
+    def get(self, sql, limit=None, offset=None):
+        try:
+            conn = self.create_connection()
+            cur = conn.cursor()
+            cur.execute(sql)
+            rows = cur.fetchall()
+            for row in rows:
+                print(row)
+            cur.close()
+        except sqlite3.Error as error:
+            print("Failed to read data from sqlite table", error)
+        finally:
+            if(conn):
+                conn.close()
+                print("The SQLite connection is closed")
+        return len(rows)

@@ -18,7 +18,10 @@ class BaseWindow:
         return label
 
     def _add_button(self, text, fg=None, bg=None, row=None, column=None, command=None, entry=None):
-        composed_command = lambda:command(entry) if command and entry else None
+        if command and entry:
+            composed_command = lambda:command(entry)
+        else:
+            composed_command = command
         # Use ttk.Button instead of tkinter.Button because of text visibility issue
         button = ttk.Button(self.root, fg=fg, bg=bg, text=text, command=composed_command)
         button.grid(row=row, column=column)
@@ -60,6 +63,12 @@ class LandingWindow(BaseWindow):
             command=self._command_find_stock,
             entry=self.entry,
         )
+        self.read_ticker_button = self._add_button(
+            text="Read Tickers",
+            row=3,
+            column=1,
+            command=self._read_all_tickers,
+        )
         self.root.mainloop()
 
     def _command_find_stock(self, entry, button=None):
@@ -77,3 +86,9 @@ class LandingWindow(BaseWindow):
             self._enable(button=self.find_stock_button)
             entry.delete(0, END)
             self.find_stock_button['text'] = 'Go to Stocks'
+
+    def _read_all_tickers(self, button=None):
+        print('asdfasd')
+        result = AlpacaRepository().read_tickers(limit=10)
+        print("printed out")
+        Label(self.root, text=result, wraplength=250).pack()

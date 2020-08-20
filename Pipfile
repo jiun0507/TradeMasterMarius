@@ -16,6 +16,7 @@ google-auth-oauthlib = "*"
 alpaca-trade-api = "*"
 pandas = "*"
 numpy = "*"
+pypika = "*"
 
 [requires]
 python_version = "3.8"

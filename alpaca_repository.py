@@ -6,7 +6,7 @@ import alpaca_trade_api as tradeapi
 import requests
 
 from sqlite import sqlite
-
+from pypika import Query, Table, Field
 config = ".config.cfg"
 class AlpacaRepository:
     def __init__(self):
@@ -68,3 +68,7 @@ class AlpacaRepository:
         sql = ''' INSERT OR REPLACE INTO Tickers(Symbol)
                 VALUES(?) '''
         self.db.post_many(sql, tickers)
+
+    def read_tickers(self, limit=None, offset=None):
+        print("inside this function")
+        return self.db.get(str(Query.from_('Tickers').select('*').limit(limit)))
