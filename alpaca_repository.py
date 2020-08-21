@@ -58,6 +58,11 @@ class AlpacaRepository:
             self.create_tickers(ticker_list)
         return "Stored tickers onto db."
 
+    def read_company_info(self, symbol):
+        company_detail = self.api.polygon.get(path=f'/meta/symbols/AAPL/company', version='v1')
+        print(company_detail)
+        return company_detail
+
     def create_tickers(self, tickers: list):
         """
         Create a new project into the projects table
@@ -69,6 +74,5 @@ class AlpacaRepository:
                 VALUES(?) '''
         self.db.post_many(sql, tickers)
 
-    def read_tickers(self, limit=None, offset=None):
-        print("inside this function")
+    def read_tickers(self, limit=None):
         return self.db.get(str(Query.from_('Tickers').select('*').limit(limit)))

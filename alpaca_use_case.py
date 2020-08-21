@@ -12,3 +12,6 @@ class AlpacaUseCase:
 
     def update_ticker_symbols(self):
         return self._repo.get_polygon_supported_ticker_symbols(700)
+
+    def read_tickers(self):
+        return self._repo.read_tickers()
