@@ -21,14 +21,40 @@ class sqlite:
 
         return conn
 
+    def post(self, sql):
+        try:
+            print(sql)
+            conn = self.create_connection()
+            cur = conn.cursor()
+            cur.execute(sql)
+            conn.commit()
+            print("Total", cur.rowcount, "Records inserted successfully into SqliteDb_developers table")
+            conn.commit()
+            cur.close()
+        except sqlite3.Error as error:
+            print(error)
+            print("Failed to insert record into sqlite table", error)
+        finally:
+            if (conn):
+                conn.close()
+                print("The SQLite connection is closed")
 
-    def post_many(self, sql, items):
+    def post_many(self, sql, items=None):
         try:
             conn = self.create_connection()
             cur = conn.cursor()
-            cur.executemany(sql, items)
-            conn.commit()
-            print("Total", cur.rowcount, "Records inserted successfully into SqliteDb_developers table")
+            if items:
+                cur.executemany(sql, items)
+            else:
+                for query in sql:
+                    try:
+                        cur.execute(query)
+                        conn.commit()
+                    except sqlite3.Error as e:
+                        print(e)
+                        continue
+                conn.commit()
+            print(f"Total {len(sql)} Records inserted successfully into SqliteDb_developers table")
             conn.commit()
             cur.close()
         except sqlite3.Error as error:

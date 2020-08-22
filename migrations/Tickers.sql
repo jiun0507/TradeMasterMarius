@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS Tickers(
+	Symbol VARCHAR(100)
+);

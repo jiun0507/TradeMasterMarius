@@ -59,9 +59,72 @@ class AlpacaRepository:
         return "Stored tickers onto db."
 
     def read_company_info(self, symbol):
-        company_detail = self.api.polygon.get(path=f'/meta/symbols/AAPL/company', version='v1')
-        print(company_detail)
+        try:
+            company_detail = self.api.polygon.get(path=f'/meta/symbols/{symbol}/company', version='v1')
+            print(company_detail['name'])
+        except:
+            print('error')
+            return None
         return company_detail
+
+    def create_company_info(self, company_detail):
+        if not company_detail:
+            return None
+        return self.db.post(str(Query.into('Company').replace(
+            company_detail['symbol'],
+            company_detail['logo'],
+            company_detail['exchange'],
+            company_detail['name'],
+            company_detail['cik'],
+            company_detail['bloomberg'],
+            company_detail['lei'],
+            company_detail['sic'],
+            company_detail['country'],
+            company_detail['industry'],
+            company_detail['sector'],
+            company_detail['marketcap'],
+            company_detail['employees'],
+            company_detail['phone'],
+            company_detail['ceo'],
+            company_detail['url'],
+            company_detail['description'],
+        )))
+
+    def create_company_informations(self, company_details):
+        if len(company_details) > 100:
+            print('This is too much information to load.')
+            return None
+        if not company_details:
+            print('There is no information.')
+            return None
+        post_body = []
+        for company_detail in company_details:
+            post_body.append(
+                (
+                    getattr(company_detail, 'symbol', None),
+                    getattr(company_detail, 'logo', None),
+                    getattr(company_detail, 'exchange', None),
+                    getattr(company_detail, 'name', None),
+                    getattr(company_detail, 'cik', None),
+                    getattr(company_detail, 'bloomberg', None),
+                    getattr(company_detail, 'lei', None),
+                    getattr(company_detail, 'sic', None),
+                    getattr(company_detail, 'country', None),
+                    getattr(company_detail, 'industry', None),
+                    getattr(company_detail, 'sector', None),
+                    getattr(company_detail, 'marketcap', None),
+                    getattr(company_detail, 'employees', None),
+                    getattr(company_detail, 'phone', None),
+                    getattr(company_detail, 'ceo', None),
+                    getattr(company_detail, 'url', None),
+                    getattr(company_detail, 'description', None),
+                ),
+            )
+        return self.db.post_many(
+            [
+                str(Query.into('Company').insert(body)) for body in post_body
+            ],
+        )
 
     def create_tickers(self, tickers: list):
         """
@@ -74,5 +137,12 @@ class AlpacaRepository:
                 VALUES(?) '''
         self.db.post_many(sql, tickers)
 
-    def read_tickers(self, limit=None):
-        return self.db.get(str(Query.from_('Tickers').select('*').limit(limit)))
+    def read_tickers(self, limit=None, offset=None):
+        query = Query.from_('Tickers').select('*')
+        if limit:
+            query = query.limit(limit)
+        if offset:
+            query = query.offset(offset)
+        return self.db.get(str(query))
+
+
