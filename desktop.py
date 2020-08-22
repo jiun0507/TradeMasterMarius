@@ -89,13 +89,14 @@ class LandingWindow(BaseWindow):
             self.find_stock_button['text'] = 'Go to Stocks'
 
     def _read_all_tickers(self, entry=None, button=None):
-        limit = 5
+        start = 3050
+        limit = 50
         total = 10
         if entry:
             total = int(entry.get())
             entry.delete(0, END)
         for step in range(total//limit + 1):
-            offset = step*limit
+            offset = step*limit + start
             tickers = AlpacaRepository().read_tickers(limit=limit, offset=offset)
             company_details = []
             for ticker in tickers:

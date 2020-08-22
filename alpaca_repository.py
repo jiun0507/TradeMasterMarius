@@ -94,30 +94,30 @@ class AlpacaRepository:
         if len(company_details) > 100:
             print('This is too much information to load.')
             return None
-        if not company_details:
+        if not company_details or len(company_details) == 0:
             print('There is no information.')
             return None
         post_body = []
         for company_detail in company_details:
             post_body.append(
                 (
-                    getattr(company_detail, 'symbol', None),
-                    getattr(company_detail, 'logo', None),
-                    getattr(company_detail, 'exchange', None),
-                    getattr(company_detail, 'name', None),
-                    getattr(company_detail, 'cik', None),
-                    getattr(company_detail, 'bloomberg', None),
-                    getattr(company_detail, 'lei', None),
-                    getattr(company_detail, 'sic', None),
-                    getattr(company_detail, 'country', None),
-                    getattr(company_detail, 'industry', None),
-                    getattr(company_detail, 'sector', None),
-                    getattr(company_detail, 'marketcap', None),
-                    getattr(company_detail, 'employees', None),
-                    getattr(company_detail, 'phone', None),
-                    getattr(company_detail, 'ceo', None),
-                    getattr(company_detail, 'url', None),
-                    getattr(company_detail, 'description', None),
+                    company_detail.get('symbol', None),
+                    company_detail.get('logo', None),
+                    company_detail.get('exchange', None),
+                    company_detail.get('name', None),
+                    company_detail.get('cik', None),
+                    company_detail.get('bloomberg', None),
+                    company_detail.get('lei', None),
+                    company_detail.get('sic', None),
+                    company_detail.get('country', None),
+                    company_detail.get('industry', None),
+                    company_detail.get('sector', None),
+                    company_detail.get('marketcap', None),
+                    company_detail.get('employees', None),
+                    company_detail.get('phone', None),
+                    company_detail.get('ceo', None),
+                    company_detail.get('url', None),
+                    company_detail.get('description', None),
                 ),
             )
         return self.db.post_many(

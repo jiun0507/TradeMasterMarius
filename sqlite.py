@@ -16,7 +16,6 @@ class sqlite:
             conn = sqlite3.connect(self.db)
             print(conn)
         except Error as e:
-            print('Are we in here?')
             print(e)
 
         return conn
@@ -51,7 +50,6 @@ class sqlite:
                         cur.execute(query)
                         conn.commit()
                     except sqlite3.Error as e:
-                        print(e)
                         continue
                 conn.commit()
             print(f"Total {len(sql)} Records inserted successfully into SqliteDb_developers table")
