@@ -117,3 +117,22 @@ class LandingWindow(BaseWindow):
     def _snapshot(self, button=None):
         snapshot = AlpacaRepository().snapshot_all_tickers()
         print(snapshot)
+
+    def _upload_financial_statements_from_companies(self, entry=None, button=None):
+        start = 0
+        limit = 50
+        total = 10
+        if entry:
+            total = int(entry.get())
+            entry.delete(0, END)
+        for step in range(total//limit + 1):
+            offset = step*limit + start
+            tickers = AlpacaRepository().read_tickers(limit=limit, offset=offset)
+            financial_statements = []
+            for ticker in tickers:
+                print(ticker)
+                result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get_financial_statement(ticker)[0]
+                if result:
+                    financial_statements.append(result)
+
+            AlpacaRepository().store_financial_statement(financial_statements)
