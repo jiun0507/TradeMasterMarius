@@ -149,62 +149,46 @@ class AlpacaRepository:
 
         return self.api.polygon.get(path=f'/snapshot/locale/us/markets/stocks/tickers', version='v2')
 
-    def store_financial_statement(self, financial_statements):
-        if len(financial_statements) > 100:
-            print('This is too much information to load.')
-            return None
-        if not financial_statements or len(financial_statements) == 0:
-            print('There is no information.')
-            return None
-        fs_time_posts = []
-        fs_indices_posts = []
-        for fs in financial_statements:
-            fs_time_posts.append(
-                (
-                    None,
-                    fs.get('data_source', 'polygon'),
-                    fs.get('ticker', None),
-                    fs.get('period', None),
-                    fs.get('calendarDate', None),
-                    fs.get('reportPeriod', None),
-                    fs.get('updated', None),
-                ),
-            )
-            fs_indices_posts.append(
-                (
-                    None,
-                    fs.get('ticker', None),
-                    fs.get('enterpriseValue', None),
-                    fs.get('enterpriseValueOverEBIT', None),
-                    fs.get('enterpriseValueOverEBITDA', None),
-                    fs.get('payoutRatio', None),
-                    fs.get('priceToBookValue', None),
-                    fs.get('priceEarnings', None),
-                    fs.get('priceToEarnings', None),
-                    fs.get('priceToEarningsRatio', None),
-                    fs.get('preferredDividendsIncomeStatementImpact', None),
-                    fs.get('sharePriceAdjustedClose', None),
-                    fs.get('priceSales', None),
-                    fs.get('priceToSalesRatio', None),
-                    fs.get('returnOnAverageAssets', None),
-                    fs.get('returnOnAverageEquity', None),
-                    fs.get('returnOnInvestedCapital', None),
-                    fs.get('returnOnSales', None),
-                    fs.get('shares', None),
-                    fs.get('weightedAverageShares', None),
-                    fs.get('weightedAverageSharesDiluted', None),
-                    fs.get('salesPerShare', None),
-                    fs.get('tangibleAssetsBookValuePerShare', None),
-                ),
-            )
+    def store_financial_statement(self, fs):
+        fs_time = (
+            None,
+            fs.get('data_source', 'polygon'),
+            fs.get('ticker', None),
+            fs.get('period', None),
+            fs.get('calendarDate', None),
+            fs.get('reportPeriod', None),
+            fs.get('updated', None),
+        )
 
-        self.db.post_many(
-            [
-                str(Query.into('FSTime').insert(body)) for body in fs_time_posts
-            ],
+        fs_indices = (
+                None,
+                None,
+                fs.get('ticker', None),
+                fs.get('enterpriseValue', None),
+                fs.get('enterpriseValueOverEBIT', None),
+                fs.get('enterpriseValueOverEBITDA', None),
+                fs.get('payoutRatio', None),
+                fs.get('priceToBookValue', None),
+                fs.get('priceEarnings', None),
+                fs.get('priceToEarnings', None),
+                fs.get('priceToEarningsRatio', None),
+                fs.get('preferredDividendsIncomeStatementImpact', None),
+                fs.get('sharePriceAdjustedClose', None),
+                fs.get('priceSales', None),
+                fs.get('priceToSalesRatio', None),
+                fs.get('returnOnAverageAssets', None),
+                fs.get('returnOnAverageEquity', None),
+                fs.get('returnOnInvestedCapital', None),
+                fs.get('returnOnSales', None),
+                fs.get('shares', None),
+                fs.get('weightedAverageShares', None),
+                fs.get('weightedAverageSharesDiluted', None),
+                fs.get('salesPerShare', None),
+                fs.get('tangibleAssetsBookValuePerShare', None),
         )
         self.db.post_many(
-            [
-                str(Query.into('FSIndices').insert(body)) for body in fs_indices_posts
-            ],
+            {
+                'fs_time': str(Query.into('FSTime').insert(fs_time)),
+                'fs_indices': str(Query.into('FSIndices').insert(fs_indices)),
+            },
         )

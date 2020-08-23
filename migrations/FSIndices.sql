@@ -1,5 +1,6 @@
 CREATE TABLE FSIndices(
-id INTEGER,
+id INTEGER PRIMARY KEY,
+time_id INTEGER,
 symbol VARCHAR(100),
 enterpriseValue INTEGER,
 enterpriseValueOverEBIT INTEGER,
@@ -22,8 +23,8 @@ weightedAverageShares INTEGER,
 weightedAverageSharesDiluted INTEGER,
 salesPerShare INTEGER,
 tangibleAssetsBookValuePerShare INTEGER,
-FOREIGN KEY (id) 
+FOREIGN KEY (time_id) 
     REFERENCES FSTime (id) 
         ON DELETE CASCADE 
-        ON UPDATE NO ACTION
+        ON UPDATE NO ACTION,
 );

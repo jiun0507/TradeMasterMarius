@@ -70,9 +70,16 @@ class LandingWindow(BaseWindow):
             entry=self.entry,
             command=self._read_all_tickers,
         )
+        self.fs_store_button = self._add_button(
+            text="fs_store",
+            row=4,
+            column=1,
+            entry=self.entry,
+            command=self._upload_financial_statements_from_companies,
+        )
         self.test_button = self._add_button(
             text="snapshot",
-            row=4,
+            row=5,
             column=1,
             entry=self.entry,
             command=self._snapshot,
@@ -118,21 +125,8 @@ class LandingWindow(BaseWindow):
         snapshot = AlpacaRepository().snapshot_all_tickers()
         print(snapshot)
 
-    def _upload_financial_statements_from_companies(self, entry=None, button=None):
-        start = 0
-        limit = 50
-        total = 10
-        if entry:
-            total = int(entry.get())
-            entry.delete(0, END)
-        for step in range(total//limit + 1):
-            offset = step*limit + start
-            tickers = AlpacaRepository().read_tickers(limit=limit, offset=offset)
-            financial_statements = []
+    def _upload_financial_statements_from_companies(self, button=None):
+            tickers = AlpacaRepository().read_tickers(limit=10, offset=0)
             for ticker in tickers:
-                print(ticker)
-                result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get_financial_statement(ticker)[0]
-                if result:
-                    financial_statements.append(result)
-
-            AlpacaRepository().store_financial_statement(financial_statements)
+                result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get_financial_statement(ticker)
+                AlpacaRepository().store_financial_statement(result[0])
