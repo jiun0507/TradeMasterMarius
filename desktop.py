@@ -70,6 +70,13 @@ class LandingWindow(BaseWindow):
             entry=self.entry,
             command=self._read_all_tickers,
         )
+        self.test_button = self._add_button(
+            text="snapshot",
+            row=4,
+            column=1,
+            entry=self.entry,
+            command=self._snapshot,
+        )
         self.root.mainloop()
 
     def _command_find_stock(self, entry, button=None):
@@ -106,4 +113,7 @@ class LandingWindow(BaseWindow):
                     company_details.append(company_detail)
 
             AlpacaRepository().create_company_informations(company_details)
-            # Label(self.root, text=result, wraplength=250).pack()
+
+    def _snapshot(self, button=None):
+        snapshot = AlpacaRepository().snapshot_all_tickers()
+        print(snapshot)

@@ -145,4 +145,6 @@ class AlpacaRepository:
             query = query.offset(offset)
         return self.db.get(str(query))
 
+    def snapshot_all_tickers(self):
 
+        return self.api.polygon.get(path=f'/snapshot/locale/us/markets/stocks/tickers', version='v2')
