@@ -2,7 +2,7 @@ import json
 from tkinter import *
 from tkinter import ttk
 
-from alpaca_repository import AlpacaRepository
+from alpaca_repository import AlpacaInterface, PolygonInterface
 from alpaca_use_case import AlpacaUseCase
 from handler import AlpacaView, TelegramInterface
 
@@ -91,10 +91,10 @@ class LandingWindow(BaseWindow):
             value = entry.get()
             entry.delete(0, END)
             if value == 'Alpaca Balance':
-                result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get()
+                result = AlpacaView(AlpacaUseCase(AlpacaInterface())).get()
                 Label(self.root, text=result).pack()
             else:
-                result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get_financial_statement(value)[0]
+                result = AlpacaView(AlpacaUseCase(AlpacaInterface())).get_financial_statement(value)[0]
                 Label(self.root, text=json.dumps(result), wraplength=250).pack()
             self.find_stock_button['text'] = 'Here it is'
         else:
@@ -111,22 +111,22 @@ class LandingWindow(BaseWindow):
             entry.delete(0, END)
         for step in range(total//limit + 1):
             offset = step*limit + start
-            tickers = AlpacaRepository().read_tickers(limit=limit, offset=offset)
+            tickers = PolygonInterface().read_tickers(limit=limit, offset=offset)
             company_details = []
             for ticker in tickers:
                 print(ticker)
-                company_detail = AlpacaRepository().read_company_info(ticker)
+                company_detail = PolygonInterface().read_company_info(ticker)
                 if company_detail:
                     company_details.append(company_detail)
 
-            AlpacaRepository().create_company_informations(company_details)
+            ().create_company_informations(company_details)
 
     def _snapshot(self, button=None):
-        snapshot = AlpacaRepository().snapshot_all_tickers()
+        snapshot = AlpacaInterface().snapshot_all_tickers()
         print(snapshot)
 
     def _upload_financial_statements_from_companies(self, button=None):
-            tickers = AlpacaRepository().read_tickers(limit=10, offset=0)
+            tickers = AlpacaInterface().read_tickers(limit=10, offset=0)
             for ticker in tickers:
-                result = AlpacaView(AlpacaUseCase(AlpacaRepository())).get_financial_statement(ticker)
-                AlpacaRepository().store_financial_statement(result[0])
+                result = AlpacaView(AlpacaUseCase(AlpacaInterface())).get_financial_statement(ticker)
+                AlpacaInterface().store_financial_statement(result[0])
