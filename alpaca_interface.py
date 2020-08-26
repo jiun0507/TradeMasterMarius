@@ -49,18 +49,17 @@ class PolygonInterface(AlpacaInterface):
         financial_statement = self.api.polygon.get(path='/reference/financials/'+symbol, params=params, version='v2')
         return financial_statement['results']
 
-    def get_polygon_ticker_symbols(self, pages):
-        ticker_list = []
+    def get_polygon_ticker_symbols(self, pages, perpage=50):
         for page in range(1, pages):
             params = {
                 'market': 'STOCKS',
                 'page': page,
+                'perpage': perpage,
+                'active': True,
             }
             data = self.api.polygon.get(path='/reference/tickers', params=params, version='v2')
             tickers = data['tickers']
-            for ticker in tickers:
-                ticker_list.append((ticker['ticker'],))
-        return ticker_list
+            yield tickers
 
     def get_polygon_company_info(self, symbol):
         try:

@@ -10,6 +10,22 @@ class TickerRepository:
     def __init__(self):
         self.engine = create_engine('sqlite:///financial_statement.db', echo=True)
 
+    def post_many(self, tickers):
+        DBSession = sessionmaker(bind=self.engine)
+        session = DBSession()
+
+        try:
+            for ticker in tickers:
+                ticker_instance = models.Ticker(
+                    symbol=ticker['symbol'],
+                )
+                session.add(ticker_instance)
+            session.commit()
+        except:
+            session.rollback()
+        finally:
+            sesssion.close()
+
     def post(self, ticker):
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
@@ -24,7 +40,6 @@ class TickerRepository:
             session.rollback()
         finally:
             sesssion.close()
-
 
     def get_many(self, limit=None, offset=None):
         DBSession = sessionmaker(bind=self.engine)
