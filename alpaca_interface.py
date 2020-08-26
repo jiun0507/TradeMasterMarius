@@ -39,6 +39,7 @@ class AlpacaInterface:
         positions = self.api.list_positions()
         return positions
 
+
 class PolygonInterface(AlpacaInterface):
     def __init__(self):
         super().__init__()
