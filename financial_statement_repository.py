@@ -4,33 +4,27 @@ from sqlalchemy.orm import sessionmaker
 import models
 
 
-class TickerRepository:
+class FinancialStatementRepository:
     def __init__(self):
         self.engine = create_engine('sqlite:///financial_statement.db', echo=True)
 
-    def post(self, ticker):
+    def post(self, fs):
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
-        ticker_instance = models.Ticker(
-            symbol=ticker['symbol'],
-        )
-        session.add(ticker_instance)
-        session.commit()
 
-    def store_financial_statement(self, fs):
-        fs_time = (
-            None,
-            fs.get('data_source', 'polygon'),
-            fs.get('ticker', None),
-            fs.get('period', None),
-            fs.get('calendarDate', None),
-            fs.get('reportPeriod', None),
-            fs.get('updated', None),
-        )
-
-        fs_indices = (
+        try:
+            financial_statement = models.FinancialStatement(
                 None,
+                fs.get('data_source', 'polygon'),
+                fs.get('ticker', None),
+                fs.get('period', None),
+                fs.get('calendarDate', None),
+                fs.get('reportPeriod', None),
+                fs.get('updated', None),
+            )
+            financial_statement_vi = models.FinancialStatementValueInvestment(
                 None,
+                financial_statement.id,
                 fs.get('ticker', None),
                 fs.get('enterpriseValue', None),
                 fs.get('enterpriseValueOverEBIT', None),
@@ -53,10 +47,12 @@ class TickerRepository:
                 fs.get('weightedAverageSharesDiluted', None),
                 fs.get('salesPerShare', None),
                 fs.get('tangibleAssetsBookValuePerShare', None),
-        )
-        self.db.post_many(
-            {
-                'fs_time': str(Query.into('FSTime').insert(fs_time)),
-                'fs_indices': str(Query.into('FSIndices').insert(fs_indices)),
-            },
-        )
+            )
+
+            session.add(financial_statement)
+            session.add(financial_statement_vi)
+            session.commit()
+        except:
+            session.rollback()
+        finally:
+            session.close()

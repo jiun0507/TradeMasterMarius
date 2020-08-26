@@ -1,4 +1,4 @@
-class AlpacaUseCase:
+class FinancialDataUseCase:
     def __init__(self, repository) -> None:
         self._repo = repository
     def get(self):

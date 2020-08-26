@@ -1,7 +1,9 @@
+from requests.sessions import session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import models
+from models import DBSession
 
 
 class TickerRepository:
@@ -11,18 +13,33 @@ class TickerRepository:
     def post(self, ticker):
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
-        ticker_instance = models.Ticker(
-            symbol=ticker['symbol'],
-        )
-        session.add(ticker_instance)
-        session.commit()
+
+        try:
+            ticker_instance = models.Ticker(
+                symbol=ticker['symbol'],
+            )
+            session.add(ticker_instance)
+            session.commit()
+        except:
+            session.rollback()
+        finally:
+            sesssion.close()
 
 
-    def get(self, limit=None, offset=None):
-        query = Query.from_('Tickers').select('*')
-        if limit:
-            query = query.limit(limit)
+    def get_many(self, limit=None, offset=None):
+        DBSession = sessionmaker(bind=self.engine)
+        session = DBSession()
+        query = session.query('Ticker')
+
         if offset:
-            query = query.offset(offset)
-        return self.db.get(str(query))
+            query.offset(offset)
 
+        if limit:
+            query.limit(limit)
+        return query
+
+    def get(self, symbol):
+        DBSession = sessionmaker(bind=self.engine)
+        session = DBSession()
+        ticker = session.query('Ticker').get(symbol=symbol)
+        return ticker
