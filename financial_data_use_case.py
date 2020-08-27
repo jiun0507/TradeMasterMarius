@@ -1,7 +1,13 @@
+import threading
+import time
+from datetime import timedelta
+
 from alpaca_interface import AlpacaInterface, PolygonInterface
-from financial_statement_repository import FinancialStatementRepository
-from ticker_repository import TickerRepository
 from company_repository import CompanyRepository
+from financial_statement_repository import FinancialStatementRepository
+from job import Job
+from signal_handler import ProgramKilled
+from ticker_repository import TickerRepository
 
 polygon = PolygonInterface()
 
@@ -58,3 +64,16 @@ class TrackingUseCase:
 
         for stock in self.stocks_on_watchlists:
             match = next((ticker for ticker in tickers if ticker['ticker'] == stock['symbol']), None)
+            print(match)
+
+    def _run_tracking(self, wait_time_minutes):
+        job = Job(interval=timedelta(seconds=wait_time_minutes*30), execute=self._get_snapshot)
+        job.run()
+
+        while True:
+            try:
+                time.sleep(1)
+            except ProgramKilled:
+                print("Program killed: running cleanup code")
+                job.stop()
+                break
