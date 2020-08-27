@@ -1,8 +1,4 @@
-import threading, time, signal
-
-from datetime import timedelta
-
-WAIT_TIME_SECONDS = 1
+import threading
 
 class Job(threading.Thread):
     def __init__(self, interval, execute, *args, **kwargs):
@@ -20,3 +16,8 @@ class Job(threading.Thread):
     def run(self):
             while not self.stopped.wait(self.interval.total_seconds()):
                 self.execute(*self.args, **self.kwargs)
+
+
+class JobRunner:
+    def __init__(self, jobs):
+        self.jobs = jobs

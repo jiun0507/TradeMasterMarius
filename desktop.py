@@ -101,7 +101,7 @@ class LandingWindow(BaseWindow):
 
 
     def _snapshot(self, button=None):
-        TrackingUseCase()._run_tracking(wait_time_minutes=3)
+        TrackingUseCase()._run_tracking(wait_time_minutes=5)
 
     # def _upload_financial_statements_from_companies(self, button=None):
     #         tickers = AlpacaInterface().read_tickers(limit=10, offset=0)

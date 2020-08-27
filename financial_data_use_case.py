@@ -67,7 +67,7 @@ class TrackingUseCase:
             print(match)
 
     def _run_tracking(self, wait_time_minutes):
-        job = Job(interval=timedelta(seconds=wait_time_minutes*30), execute=self._get_snapshot)
+        job = Job(interval=timedelta(seconds=wait_time_minutes*60), execute=self._get_snapshot)
         job.run()
 
         while True:
