@@ -51,26 +51,35 @@ class CompanyRepository:
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
 
-        for company_detail in company_details:
-            company = models.Company(
-                company_detail.get('symbol', None),
-                company_detail.get('logo', None),
-                company_detail.get('exchange', None),
-                company_detail.get('name', None),
-                company_detail.get('cik', None),
-                company_detail.get('bloomberg', None),
-                company_detail.get('lei', None),
-                company_detail.get('sic', None),
-                company_detail.get('country', None),
-                company_detail.get('industry', None),
-                company_detail.get('sector', None),
-                company_detail.get('marketcap', None),
-                company_detail.get('employees', None),
-                company_detail.get('phone', None),
-                company_detail.get('ceo', None),
-                company_detail.get('url', None),
-                company_detail.get('description', None),
-            )
-
-            session.add(company)
-        session.commit()
+        try:
+            for company_detail in company_details:
+                with session.no_autoflush:
+                    try:
+                        company = models.Company(
+                            symbol=company_detail.get('symbol', None),
+                            logo=company_detail.get('logo', None),
+                            exchange=company_detail.get('exchange', None),
+                            name=company_detail.get('name', None),
+                            cik=company_detail.get('cik', None),
+                            bloomberg=company_detail.get('bloomberg', None),
+                            lei=company_detail.get('lei', None),
+                            sic=company_detail.get('sic', None),
+                            country=company_detail.get('country', None),
+                            industry=company_detail.get('industry', None),
+                            sector=company_detail.get('sector', None),
+                            marketCap=company_detail.get('marketcap', None),
+                            employees=company_detail.get('employees', None),
+                            phone=company_detail.get('phone', None),
+                            ceo=company_detail.get('ceo', None),
+                            url=company_detail.get('url', None),
+                            description=company_detail.get('description', None),
+                        )
+                        session.add(company)
+                    except Exception as e:
+                        print("company not added", e)
+            session.commit()
+        except Exception as e:
+            print("Roll Back! ", e)
+            session.rollback()
+        finally:
+            session.close()

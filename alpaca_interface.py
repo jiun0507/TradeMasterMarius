@@ -36,9 +36,13 @@ class AlpacaInterface:
         return 'Today\'s portfolio balance change:{}'.format(balance_change)
 
     def get_position_list(self):
-        positions = self.api.list_positions()
-        return positions
+        return self.api.list_positions()
 
+    def get_watchlists(self):
+        return self.api.get_watchlists()
+
+    def get_watchlist(self, watchlist_id):
+        return self.api.get_watchlist(watchlist_id)
 
 class PolygonInterface(AlpacaInterface):
     def __init__(self):
@@ -51,16 +55,15 @@ class PolygonInterface(AlpacaInterface):
         return financial_statement['results']
 
     def get_polygon_ticker_symbols(self, pages, perpage=50):
-        for page in range(1, pages):
-            params = {
-                'market': 'STOCKS',
-                'page': page,
-                'perpage': perpage,
-                'active': True,
-            }
-            data = self.api.polygon.get(path='/reference/tickers', params=params, version='v2')
-            tickers = data['tickers']
-            yield tickers
+        params = {
+            'market': 'STOCKS',
+            'page': pages,
+            # 'perpage': perpage,
+            'active': 'true',
+        }
+        data = self.api.polygon.get(path='/reference/tickers', params=params, version='v2')
+        tickers = data['tickers']
+        return tickers
 
     def get_polygon_company_info(self, symbol):
         try:

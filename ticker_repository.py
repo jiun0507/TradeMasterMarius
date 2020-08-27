@@ -15,16 +15,20 @@ class TickerRepository:
         session = DBSession()
 
         try:
-            for ticker in tickers:
-                ticker_instance = models.Ticker(
-                    symbol=ticker['symbol'],
-                )
-                session.add(ticker_instance)
+            with session.no_autoflush:
+                for ticker in tickers:
+                    if ticker.get('ticker', None):
+                        ticker_instance = models.Ticker(
+                            symbol=ticker['ticker'],
+                        )
+                        session.add(ticker_instance)
             session.commit()
-        except:
+            print("Post successful.")
+        except Exception as e:
+            print("Post many failed. Roll Back ! ", e)
             session.rollback()
         finally:
-            sesssion.close()
+            session.close()
 
     def post(self, ticker):
         DBSession = sessionmaker(bind=self.engine)
@@ -44,17 +48,11 @@ class TickerRepository:
     def get_many(self, limit=None, offset=None):
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
-        query = session.query('Ticker')
+        return session.query(models.Ticker).offset(offset).limit(limit).all()
 
-        if offset:
-            query.offset(offset)
-
-        if limit:
-            query.limit(limit)
-        return query
 
     def get(self, symbol):
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
-        ticker = session.query('Ticker').get(symbol=symbol)
+        ticker = session.query(models.Ticker).get(symbol=symbol)
         return ticker

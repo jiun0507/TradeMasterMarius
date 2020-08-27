@@ -1,9 +1,7 @@
-import collections
-
 from sqlalchemy.sql.schema import UniqueConstraint
 from sqlalchemy import Column, Integer, String, ForeignKey, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, backref, sessionmaker, joinedload
+from sqlalchemy.orm import relationship, sessionmaker
 
 
 engine = create_engine('sqlite:///financial_statement.db', echo=True)
@@ -19,7 +17,7 @@ class Ticker(Base):
     # Every SQLAlchemy table should have a primary key named 'id'
     id = Column(Integer, primary_key=True)
 
-    symbol = Column(String)
+    symbol = Column(String, unique=True)
 
     # Lets us print out a user object conveniently.
     def __repr__(self):
