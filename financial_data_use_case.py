@@ -46,6 +46,20 @@ class FinancialDataUseCase:
             offset += limit
         return
 
+    def store_financial_statement_from_ticker_table(self, offset=0, limit=100, total = 34277):
+        offset = 0
+        while offset < total:
+            print('the start:', offset)
+            tickers = self._ticker_repo.get_many(offset=offset, limit=limit)
+            for ticker in tickers:
+                fs_list = polygon.get_polygon_financial_statement(symbol=ticker.symbol, limit=10)
+                if fs_list:
+                    self._financial_statement_repo.post_many(fs_list)
+            offset += limit
+            print(offset)
+        return
+
+
 
 class TrackingUseCase:
     def __init__(self):
@@ -66,14 +80,16 @@ class TrackingUseCase:
             match = next((ticker for ticker in tickers if ticker['ticker'] == stock['symbol']), None)
             print(match)
 
-    def _run_tracking(self, wait_time_minutes):
-        job = Job(interval=timedelta(seconds=wait_time_minutes*60), execute=self._get_snapshot)
-        job.run()
+    def _run_tracking_and_store_financial_data(self, wait_time_minutes):
+        tracking_job = Job(interval=timedelta(seconds=wait_time_minutes*60), execute=self._get_snapshot)
+        financial_statement_store_job = Job(interval=timedelta(seconds=1), execute=FinancialDataUseCase().store_financial_statement_from_ticker_table)
+        financial_statement_store_job.run()
+        tracking_job.run()
 
         while True:
             try:
                 time.sleep(1)
             except ProgramKilled:
                 print("Program killed: running cleanup code")
-                job.stop()
+                financial_statement_store_job.stop()
                 break

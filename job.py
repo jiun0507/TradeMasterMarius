@@ -1,4 +1,6 @@
+from signal_handler import ProgramKilled
 import threading
+from time import time
 
 class Job(threading.Thread):
     def __init__(self, interval, execute, *args, **kwargs):
@@ -21,3 +23,16 @@ class Job(threading.Thread):
 class JobRunner:
     def __init__(self, jobs):
         self.jobs = jobs
+
+    def run(self):
+        for job in self.jobs:
+            job.run()
+
+        while True:
+            try:
+                time.sleep(1)
+            except ProgramKilled:
+                print("Program killed: running cleanup code")
+                for job in self.jobs:
+                    job.stop()
+                break
