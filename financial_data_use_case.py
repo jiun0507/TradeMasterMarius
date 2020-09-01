@@ -47,7 +47,7 @@ class FinancialDataUseCase:
         return
 
     def store_financial_statement_from_ticker_table(self, offset=0, limit=100, total = 34277):
-        offset = 0
+        offset = 27909
         while offset < total:
             print('the start:', offset)
             tickers = self._ticker_repo.get_many(offset=offset, limit=limit)

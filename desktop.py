@@ -1,7 +1,8 @@
-from financial_data_use_case import FinancialDataUseCase, TrackingUseCase
-import json
 from tkinter import *
 from tkinter import ttk
+
+from financial_data_use_case import FinancialDataUseCase, TrackingUseCase
+
 
 class BaseWindow:
     def __init__(self, width=None, height=None):
