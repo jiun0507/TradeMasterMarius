@@ -16,8 +16,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 This is a stock screening, stock price tracking system just for myself. But with Alpaca Open API key and telegram Open API key, you can use this program as well.
 
 Here's why I made this program:
@@ -55,10 +53,9 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 Screenshots
-
-
-
-
+<img width="377" alt="스크린샷 2020-09-06 오전 12 01 56" src="https://user-images.githubusercontent.com/22138357/92307992-413fe380-efd5-11ea-9e36-56b84614395f.png">
+<img width="1786" alt="스크린샷 2020-09-06 오전 12 10 09" src="https://user-images.githubusercontent.com/22138357/92308006-5e74b200-efd5-11ea-8c94-e24c5cbb8165.png">
+<img width="400" alt="스크린샷 2020-09-06 오전 12 11 45" src="https://user-images.githubusercontent.com/22138357/92308018-90861400-efd5-11ea-9f7f-926ec2609331.png">
 
 
 <!-- ROADMAP -->
@@ -85,18 +82,3 @@ Contributions are what make the open source community such an amazing place to b
 Jiun Kim - 
 Project Link: [https://github.com/jiun0507](https://github.com/jiun0507)
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=flat-square
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=flat-square
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=flat-square
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=flat-square
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=flat-square
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
