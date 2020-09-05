@@ -18,22 +18,25 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-I've tried web scrapping with Python before. But it was very slow. So I made one using Go. 
+This is a stock screening, stock price tracking system just for myself. But with Alpaca Open API key and telegram Open API key, you can use this program as well.
 
-Here's why I used Go:
-* Super Fast! It utilizes multiprocessing through goroutines.(It's amazing)
-* I am looking for jobs and I wanted to scrappe jobs from indeed. com
+Here's why I made this program:
+* There are stock tracking programs, but they usually have number limits. Making my own program lets me customize notifications the way I want them to be.
+* There are stock screening services everywhere. But I felt that with enough data, I can make one that is both customizable and automatic.
+* Also I like to make stuff.
 
 ### Built With
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* Go
-* Echo
-
+* SQLAlchemy, SQLite
+* Python
+* PySimpleGUI
+* Telegram Open API python wrapper
+* Alpaca Open API python wrapper
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
-Install Go on Visual Studio code and install GO package. 
+Install Python and Pipenv and run "pipenv install" inside the shell.
 
 ### Prerequisites
 
@@ -41,17 +44,18 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-1. If You are a mac user go to -> https://golang.org/doc/install?download=go1.14.2.darwin-amd64.pkg.
-If not just google Go Download.
-2. Install the package.
-
+1. Python 3.8
+2. pipenv
+3. SQLite
+4. DB Browser for SQLite
+5. SQLAlchemy
+6. Alpaca open api
+7. etc. go to Pipfile
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 Screenshots
-<img width="1198" alt="CSV_file" src="https://user-images.githubusercontent.com/22138357/80076460-31c08080-8587-11ea-980f-acbc56c7e96e.png">
-<img width="822" alt="Homepage" src="https://user-images.githubusercontent.com/22138357/80076580-60d6f200-8587-11ea-9724-ec13afc1d27e.png">
-<img width="1267" alt="CSV_file2" src="https://user-images.githubusercontent.com/22138357/80076566-5b79a780-8587-11ea-94a7-be60de3413c1.png">
+
 
 
 
