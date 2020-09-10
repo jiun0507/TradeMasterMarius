@@ -8,6 +8,7 @@
   * [Installation](#installation)
 * [Usage](#usage)
 * [Roadmap](#roadmap)
+* [Acknowledgements](#acknowledgements)
 * [Contributing](#contributing)
 * [Contact](#contact)
 
@@ -25,11 +26,10 @@ Here's why I made this program:
 
 ### Built With
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* SQLAlchemy, SQLite
+* SQLite
 * Python
 * PySimpleGUI
-* Telegram Open API python wrapper
-* Alpaca Open API python wrapper
+
 
 
 <!-- GETTING STARTED -->
@@ -63,7 +63,11 @@ Screenshots
 
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
 
-
+<!-- ACKNOWLEDGEMENTS -->
+## Acknowledgements
+1. sqlalchemy https://github.com/sqlalchemy/sqlalchemy
+2. Alpaca Trade API https://github.com/alpacahq/alpaca-trade-api-python
+3. Telegram python wrapper https://github.com/eternnoir/pyTelegramBotAPI
 
 <!-- CONTRIBUTING -->
 ## Contributing
