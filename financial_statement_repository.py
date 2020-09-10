@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import models
+from models import FinancialStatement
 
 
 class FinancialStatementRepository:
@@ -106,3 +107,20 @@ class FinancialStatementRepository:
             session.rollback()
         finally:
             session.close()
+
+    def get(self, offset=0, rows=0):
+        DBSession = sessionmaker(bind=self.engine)
+        session = DBSession()
+        fs_list = session.query(FinancialStatement).offset(offset).limit(rows).all()
+        new_fs_list = []
+        for fs in fs_list:
+            new_fs = []
+            new_fs.append(fs.dataSource)
+            new_fs.append(fs.symbol)
+            new_fs.append(fs.period)
+            new_fs.append(fs.calendarDate)
+            new_fs.append(fs.reportPeriod)
+            new_fs.append(fs.updated)
+            new_fs_list.append(new_fs)
+        session.close()
+        return new_fs_list
