@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from signal_handler import ProgramKilled
 from watchlist_repository import WatchlistRepository
 import PySimpleGUI as sg
 from models import FinancialStatement, WatchList
@@ -23,7 +24,6 @@ class WatchListView:
 
     def make_table(self):
         rows = self.get_rows_from_watchlist()
-        print(len(rows))
         data = [[j for j in range(3)] for i in range(len(rows)+1)]
         data[0] = ['symbol', 'expected_price']
 
@@ -93,34 +93,29 @@ class DealsView:
         return WatchList.__table__.columns.keys()
 
     def get_rows_from_watchlist(self):
-        watch_list = self.alpaca_interface.get_watchlists()
-        filtered_rows = []
-
-        rows = self.alpaca_interface.get_watchlist(watch_list[0].id)
-        for row in rows.assets:
-            snapshot = self.polygon_interface.get_snapshot_of_ticker(row['symbol'])
-            filtered_rows.append([
-                row['symbol'],
-                snapshot['ticker']['day']['v'],
-                0,
-            ])
-        return filtered_rows
+        return self.watchlist_repository.get_all()
 
     def make_table(self):
         rows = self.get_rows_from_watchlist()
-        print(len(rows))
-        data = [[j for j in range(4)] for i in range(len(rows)+1)]
-        data[0] = ['symbol', 'price', 'expected_price']
-
-        for i in range(1, len(rows)+1):
-            data[i] = rows[i-1]
+        data = [[j for j in range(3)] for i in range(len(rows)+1)]
+        data[0] = ['symbol', 'expected_price', 'price']
+        for i in range(len(rows)):
+            row = rows[i]
+            snapshot = self.polygon_interface.get_snapshot_of_ticker(row[0])
+            data[i+1] = [
+                str(row[0]),
+                str(row[1]),
+                str(snapshot['ticker']['day']['v']),
+            ]
         return data
 
     def __init__(self):
         # ------ Initialize the table ------
         self.alpaca_interface = AlpacaInterface()
         self.polygon_interface = PolygonInterface()
+        self.watchlist_repository= WatchlistRepository()
         self.data = self.make_table()
+
         headings = [str(self.data[0][x]) for x in range(len(self.data[0]))]
 
         # ------ Window Layout ------
@@ -147,12 +142,19 @@ class DealsView:
 
     def run(self):
         # ------ Event Loop ------
+        print("started")
         while True:
-            event, values = self.window.read()
-            print(event, values)
-            self.data = self.make_tables()
-            self.window['-TABLE-'].update(values=self.data)
-            time.sleep(60)
+            try:
+                # event, values = self.window.read()
+                # print(event, values)
+                self.data = self.make_table()
+                print(self.data)
+                self.window['-TABLE-'].update(values=self.data[1:][:])
+                time.sleep(5)
+
+            except ProgramKilled:
+                print("Program killed: running cleanup code")
+                break
 
         self.window.close()
 
@@ -212,8 +214,8 @@ class FSTableView:
                 self.table_offset += 15
                 new_table = self.make_table(offset=self.table_offset, num_rows=15, num_cols=6)
                 for row in new_table[1:]:
-                    print(row)
                     self.data.append(row)
+                print(self.data)
                 self.window['-TABLE-'].update(values=self.data)
             elif event == 'Change Colors':
                 self.window['-TABLE-'].update(row_colors=((8, 'white', 'blue'), (9, 'green')))

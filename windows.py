@@ -1,4 +1,4 @@
-from FSTableJob import FSTableView, WatchListView
+from FSTableJob import DealsView, FSTableView, WatchListView
 
 # FSTableView().run()
-WatchListView().run()
+DealsView().run()

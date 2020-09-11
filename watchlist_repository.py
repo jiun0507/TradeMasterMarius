@@ -12,9 +12,8 @@ class WatchlistRepository:
     def get_all(self):
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
-        watchlist = session.query(WatchList).filter()
+        watchlist = session.query(WatchList).all()
         formatted_watchlist = []
-        print(len(formatted_watchlist))
         for stock in watchlist:
             print(stock)
             formatted_stock = []
@@ -22,4 +21,5 @@ class WatchlistRepository:
             formatted_stock.append(stock.expected_price)
             formatted_watchlist.append(formatted_stock)
         session.close()
+        print(len(formatted_watchlist), "there is no watchlist")
         return formatted_watchlist
