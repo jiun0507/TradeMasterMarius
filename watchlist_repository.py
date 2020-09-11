@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+import models
 from models import WatchList
 
 
@@ -11,8 +12,9 @@ class WatchlistRepository:
     def get_all(self):
         DBSession = sessionmaker(bind=self.engine)
         session = DBSession()
-        watchlist = session.query(WatchList).all()
+        watchlist = session.query(WatchList).filter()
         formatted_watchlist = []
+        print(len(formatted_watchlist))
         for stock in watchlist:
             print(stock)
             formatted_stock = []

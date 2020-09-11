@@ -15,7 +15,6 @@ class WatchList(Base):
     id = Column(Integer, primary_key=True)
 
     symbol = Column(String, unique=True)
-    watchlist_id = Column(String)
     expected_price = Column(Integer)
     def __repr__(self):
        return "<WatchList(symbol='%s'>" % (

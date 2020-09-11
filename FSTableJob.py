@@ -31,6 +31,14 @@ class WatchListView:
             data[i] = rows[i-1]
         return data
 
+    def get_alpaca_watchlist(self):
+        watch_list = self.alpaca_interface.get_watchlists()
+        stocks = []
+        rows = self.alpaca_interface.get_watchlist(watch_list[0].id)
+        for row in rows.assets:
+            stocks.append(row.symbol)
+        return stocks
+
     def __init__(self):
         # ------ Initialize the table ------
         self.alpaca_interface = AlpacaInterface()
