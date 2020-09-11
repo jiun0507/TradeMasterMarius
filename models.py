@@ -10,7 +10,18 @@ session = DBSession()
 Base = declarative_base()
 
 
-# Our User object, mapped to the 'users' table
+class WatchList(Base):
+    __tablename__ = 'watchlist'
+    id = Column(Integer, primary_key=True)
+
+    symbol = Column(String, unique=True)
+    watchlist_id = Column(String)
+    expected_price = Column(Integer)
+    def __repr__(self):
+       return "<WatchList(symbol='%s'>" % (
+                               self.symbol)
+
+
 class Ticker(Base):
     __tablename__ = 'ticker'
 

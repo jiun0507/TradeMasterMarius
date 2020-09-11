@@ -75,3 +75,6 @@ class PolygonInterface(AlpacaInterface):
     def get_snapshot_of_tickers(self):
 
         return self.api.polygon.get(path=f'/snapshot/locale/us/markets/stocks/tickers', version='v2')
+
+    def get_snapshot_of_ticker(self, ticker):
+        return self.api.polygon.get(path=f'/snapshot/locale/us/markets/stocks/tickers/{ticker}', version='v2')

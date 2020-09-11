@@ -124,3 +124,4 @@ class FinancialStatementRepository:
             new_fs_list.append(new_fs)
         session.close()
         return new_fs_list
+
