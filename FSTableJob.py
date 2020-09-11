@@ -145,12 +145,11 @@ class DealsView:
         print("started")
         while True:
             try:
-                # event, values = self.window.read()
-                # print(event, values)
+                event, values = self.window.read(timeout=10)
+                print(event, values)
                 self.data = self.make_table()
                 print(self.data)
-                self.window['-TABLE-'].update(values=self.data[1:][:])
-                time.sleep(5)
+                self.window['-TABLE-'].update(values=self.data)
 
             except ProgramKilled:
                 print("Program killed: running cleanup code")
