@@ -63,7 +63,7 @@ class WatchListView:
                             alternating_row_color='lightyellow',
                             key='-TABLE-',
                             row_height=35,
-                            tooltip='This is a table')],
+                            tooltip='Watchlist Editor')],
                 [sg.InputText('Symbol'), sg.InputText('expected price')],
                 [sg.Button('Upload'), sg.Button('Delete'), sg.Button('Change Colors')],
                 [sg.Text('Upload= Upload one to the Watchlist')],
@@ -115,11 +115,11 @@ class DealsView:
         data[0] = ['symbol', 'expected_price', 'price', 'time']
         for i in range(len(rows)):
             row = rows[i]
-            snapshot = self.polygon_interface.get_last_quote_of_ticker(row[0])
+            snapshot = self.polygon_interface.get_last_trade_of_ticker(row[0])
             data[i+1] = [
                 str(row[0]),
                 str(row[1]),
-                str(snapshot['last']['askprice']),
+                str(snapshot['last']['price']),
                 datetime.now(tz),
             ]
         return data
@@ -130,11 +130,13 @@ class DealsView:
         self.polygon_interface = PolygonInterface()
         self.watchlist_repository = WatchlistRepository()
         self.data = self.make_table()
-
+        self.market_status = self.polygon_interface.get_market_status()
         headings = [str(self.data[0][x]) for x in range(len(self.data[0]))]
 
         # ------ Window Layout ------
-        layout = [[sg.Table(values=self.data[1:][:], headings=headings, max_col_width=25,
+        layout = [
+                [sg.Text(f"Market Status: {self.market_status}")],
+                [sg.Table(values=self.data[1:][:], headings=headings, max_col_width=25,
                             # background_color='light blue',
                             auto_size_columns=True,
                             display_row_numbers=True,
@@ -143,9 +145,9 @@ class DealsView:
                             alternating_row_color='lightyellow',
                             key='-TABLE-',
                             row_height=35,
-                            tooltip='This is a table')],
+                            tooltip='Watchlist Tracker')],
                 [sg.Button('Upload'), sg.Button('Delete'), sg.Button('Change Colors')],
-                [sg.Text('Upload= Upload one to the Watchlist')],
+                [sg.Text('Upload = Upload one to the Watchlist')],
                 [sg.Text('Delete = Delete a stock from the watchlist')],
                 [sg.Text('Change Colors = Changes the colors of rows 8 and 9')]]
 
@@ -159,10 +161,11 @@ class DealsView:
         # ------ Event Loop ------
         print("started")
         while True:
-            event, values = self.window.read(timeout=10000)
+            event, values = self.window.read(timeout=3000)
             print(event, values)
             self.data = self.make_table()
-            self.window['-TABLE-'].update(values=self.data[1:][:])
+            self.window['-TABLE-'].update(
+                values=self.data[1:][:])
 
         self.window.close()
 

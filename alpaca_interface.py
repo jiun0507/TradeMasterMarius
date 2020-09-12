@@ -82,3 +82,11 @@ class PolygonInterface(AlpacaInterface):
     def get_last_quote_of_ticker(self, ticker):
 
         return self.api.polygon.get(path=f'/last_quote/stocks/{ticker}', version='v1')
+
+    def get_last_trade_of_ticker(self, ticker):
+
+        return self.api.polygon.get(path=f'/last/stocks/{ticker}', version='v1')
+
+    def get_market_status(self):
+        status = self.api.polygon.get(path=f'/marketstatus/now', version='v1')
+        return status['market']
