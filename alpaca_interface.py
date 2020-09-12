@@ -79,3 +79,7 @@ class PolygonInterface(AlpacaInterface):
     def get_snapshot_of_ticker(self, ticker):
 
         return self.api.polygon.get(path=f'/snapshot/locale/us/markets/stocks/tickers/{ticker}', version='v2')
+
+    def get_last_quote_of_ticker(self, ticker):
+
+        return self.api.polygon.get(path=f'/last_quote/stocks/{ticker}', version='v1')

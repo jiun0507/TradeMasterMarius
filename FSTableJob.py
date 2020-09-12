@@ -7,6 +7,9 @@ from financial_data_use_case import FinancialDataUseCase
 from alpaca_interface import AlpacaInterface, PolygonInterface
 import time
 import abc
+from datetime import datetime
+from pytz import timezone
+tz = timezone('EST')
 """
     Basic use of the Table Element
 """
@@ -36,14 +39,19 @@ class WatchListView:
         stocks = []
         rows = self.alpaca_interface.get_watchlist(watch_list[0].id)
         for row in rows.assets:
-            stocks.append(row.symbol)
+            stocks.append(row['symbol'])
         return stocks
+
+    def sync_alpaca_to_local_watchlist(self, stocks):
+        self.watchlist_repository.update_watchlist(stocks)
 
     def __init__(self):
         # ------ Initialize the table ------
         self.alpaca_interface = AlpacaInterface()
         self.polygon_interface = PolygonInterface()
         self.watchlist_repository= WatchlistRepository()
+
+        self.sync_alpaca_to_local_watchlist(self.get_alpaca_watchlist())
         self.data = self.make_table()
         headings = [str(self.data[0][x]) for x in range(len(self.data[0]))]
 
@@ -97,15 +105,16 @@ class DealsView:
 
     def make_table(self):
         rows = self.get_rows_from_watchlist()
-        data = [[j for j in range(3)] for i in range(len(rows)+1)]
-        data[0] = ['symbol', 'expected_price', 'price']
+        data = [[j for j in range(4)] for i in range(len(rows)+1)]
+        data[0] = ['symbol', 'expected_price', 'price', 'time']
         for i in range(len(rows)):
             row = rows[i]
-            snapshot = self.polygon_interface.get_snapshot_of_ticker(row[0])
+            snapshot = self.polygon_interface.get_last_quote_of_ticker(row[0])
             data[i+1] = [
                 str(row[0]),
                 str(row[1]),
-                str(snapshot['ticker']['day']['v']),
+                str(snapshot['last']['askprice']),
+                datetime.now(tz),
             ]
         return data
 
@@ -144,16 +153,10 @@ class DealsView:
         # ------ Event Loop ------
         print("started")
         while True:
-            try:
-                event, values = self.window.read(timeout=10)
-                print(event, values)
-                self.data = self.make_table()
-                print(self.data)
-                self.window['-TABLE-'].update(values=self.data)
-
-            except ProgramKilled:
-                print("Program killed: running cleanup code")
-                break
+            event, values = self.window.read(timeout=10000)
+            print(event, values)
+            self.data = self.make_table()
+            self.window['-TABLE-'].update(values=self.data[1:][:])
 
         self.window.close()
 
@@ -214,7 +217,6 @@ class FSTableView:
                 new_table = self.make_table(offset=self.table_offset, num_rows=15, num_cols=6)
                 for row in new_table[1:]:
                     self.data.append(row)
-                print(self.data)
                 self.window['-TABLE-'].update(values=self.data)
             elif event == 'Change Colors':
                 self.window['-TABLE-'].update(row_colors=((8, 'white', 'blue'), (9, 'green')))
