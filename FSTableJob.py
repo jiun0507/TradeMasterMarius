@@ -66,6 +66,7 @@ class WatchListView:
                             key='-TABLE-',
                             row_height=35,
                             tooltip='This is a table')],
+                [sg.InputText('Symbol'), sg.InputText('expected price')],
                 [sg.Button('Upload'), sg.Button('Delete'), sg.Button('Change Colors')],
                 [sg.Text('Upload= Upload one to the Watchlist')],
                 [sg.Text('Delete = Delete a stock from the watchlist')],
@@ -84,8 +85,15 @@ class WatchListView:
             print(event, values)
             if event == sg.WIN_CLOSED:
                 break
+            if event == 'Upload':
+                print(values)
+                try:
+                    self.alpaca_interface.post_to_watchlist(symbol=values[0])
+                    if not self.watchlist_repository.update_stock_on_watchlist(symbol=values[0], expected_price=values[1]):
+                        print("The symbol already exists on the local watchlist.")
+                except Exception as e:
+                    print(e)
             if event == 'Add':
-
                 self.data = self.make_table()
                 self.window['-TABLE-'].update(values=self.data)
             elif event == 'Change Colors':

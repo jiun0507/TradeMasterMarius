@@ -21,6 +21,7 @@ class AlpacaInterface:
             'https://paper-api.alpaca.markets',
             api_version='v2',
         )
+        self.watchlist_id = str(self.get_watchlists()[0].id)
 
     def read_key_from_config_file(self, config, key):
         parser = cfg.ConfigParser()
@@ -43,6 +44,9 @@ class AlpacaInterface:
 
     def get_watchlist(self, watchlist_id):
         return self.api.get_watchlist(watchlist_id)
+
+    def post_to_watchlist(self, symbol):
+        return self.api.add_to_watchlist(symbol=symbol, watchlist_id=self.watchlist_id)
 
 class PolygonInterface(AlpacaInterface):
     def __init__(self):

@@ -1,4 +1,5 @@
 from logging import exception
+from alpaca_trade_api.entity import Watchlist
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -54,3 +55,23 @@ class WatchlistRepository:
         finally:
             session.close()
 
+    def update_stock_on_watchlist(self, symbol, expected_price=0):
+        DBSession = sessionmaker(bind=self.engine)
+        session = DBSession()
+        instance = session.query(WatchList).filter_by(symbol=symbol).first()
+        if instance:
+            if expected_price == 0:
+                return False
+            else:
+                instance.expectedPrice = expected_price
+                session.commit()
+        else:
+            session.add(
+                WatchList(
+                    symbol=symbol,
+                    expectedPrice=expected_price,
+                )
+            )
+            session.commit()
+        session.close()
+        return True
