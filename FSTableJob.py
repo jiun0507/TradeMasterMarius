@@ -1,12 +1,9 @@
 #!/usr/bin/env python
-from signal_handler import ProgramKilled
 from watchlist_repository import WatchlistRepository
 import PySimpleGUI as sg
 from models import FinancialStatement, WatchList
 from financial_data_use_case import FinancialDataUseCase
 from alpaca_interface import AlpacaInterface, PolygonInterface
-import time
-import abc
 from datetime import datetime
 from pytz import timezone
 tz = timezone('EST')
@@ -15,6 +12,7 @@ tz = timezone('EST')
 """
 
 sg.theme('Dark Green')
+
 
 class WatchListView:
     # ------ Some functions to help generate data for the table ------
@@ -49,7 +47,7 @@ class WatchListView:
         # ------ Initialize the table ------
         self.alpaca_interface = AlpacaInterface()
         self.polygon_interface = PolygonInterface()
-        self.watchlist_repository= WatchlistRepository()
+        self.watchlist_repository = WatchlistRepository()
 
         self.sync_alpaca_to_local_watchlist(self.get_alpaca_watchlist())
         self.data = self.make_table()
@@ -130,7 +128,7 @@ class DealsView:
         # ------ Initialize the table ------
         self.alpaca_interface = AlpacaInterface()
         self.polygon_interface = PolygonInterface()
-        self.watchlist_repository= WatchlistRepository()
+        self.watchlist_repository = WatchlistRepository()
         self.data = self.make_table()
 
         headings = [str(self.data[0][x]) for x in range(len(self.data[0]))]

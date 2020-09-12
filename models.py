@@ -16,8 +16,9 @@ class WatchList(Base):
 
     symbol = Column(String, unique=True)
     expected_price = Column(Integer)
+
     def __repr__(self):
-       return "<WatchList(symbol='%s'>" % (
+        return "<WatchList(symbol='%s'>" % (
                                self.symbol)
 
 
@@ -31,8 +32,9 @@ class Ticker(Base):
 
     # Lets us print out a user object conveniently.
     def __repr__(self):
-       return "<Ticker(symbol='%s'>" % (
+        return "<Ticker(symbol='%s'>" % (
                                self.symbol)
+
 
 class Company(Base):
     __tablename__ = 'company'
@@ -60,6 +62,7 @@ class Company(Base):
        return "<Company(symbol='%s'>" % (
                                self.symbol)
 
+
 class FinancialStatement(Base):
     __tablename__ = 'financial_statement'
 
@@ -72,6 +75,7 @@ class FinancialStatement(Base):
     updated = Column(String)
     UniqueConstraint(symbol, period, calendarDate, reportPeriod)
     financial_statement_value_investment = relationship('FinancialStatementValueInvestment', back_populates='financial_statement', uselist=False)
+
 
 class FinancialStatementValueInvestment(Base):
     __tablename__ = 'financial_statement_value_investment'

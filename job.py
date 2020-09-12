@@ -1,6 +1,7 @@
 from signal_handler import ProgramKilled
 import threading
-from time import time
+import time
+
 
 class Job(threading.Thread):
     def __init__(self, interval, execute, *args, **kwargs):
@@ -13,11 +14,12 @@ class Job(threading.Thread):
         self.kwargs = kwargs
 
     def stop(self):
-                self.stopped.set()
-                self.join()
+        self.stopped.set()
+        self.join()
+
     def run(self):
-            while not self.stopped.wait(self.interval.total_seconds()):
-                self.execute(*self.args, **self.kwargs)
+        while not self.stopped.wait(self.interval.total_seconds()):
+            self.execute(*self.args, **self.kwargs)
 
 
 class JobRunner:

@@ -1,12 +1,7 @@
 import configparser as cfg
-import json
-from socket import create_connection
 
 import alpaca_trade_api as tradeapi
-import requests
 
-from sqlite import sqlite
-from pypika import Query, Table, Field
 config = ".config.cfg"
 
 
