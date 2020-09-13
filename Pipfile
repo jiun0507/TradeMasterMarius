@@ -20,6 +20,7 @@ numpy = "*"
 pypika = "*"
 sqlalchemy = "*"
 pysimplegui = "*"
+holidays = "*"
 
 [requires]
 python_version = "3.8"

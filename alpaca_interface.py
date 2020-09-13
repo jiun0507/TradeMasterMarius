@@ -40,6 +40,14 @@ class AlpacaInterface:
     def get_watchlist(self, watchlist_id):
         return self.api.get_watchlist(watchlist_id)
 
+    def get_stocks_in_alpaca_watchlist(self):
+        watch_list = self.get_watchlists()
+        stocks = []
+        rows = self.get_watchlist(watch_list[0].id)
+        for row in rows.assets:
+            stocks.append(row['symbol'])
+        return stocks
+
     def post_to_watchlist(self, symbol):
         return self.api.add_to_watchlist(symbol=symbol, watchlist_id=self.watchlist_id)
 

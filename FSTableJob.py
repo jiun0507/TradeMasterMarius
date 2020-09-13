@@ -32,14 +32,6 @@ class WatchListView:
             data[i] = rows[i-1]
         return data
 
-    def get_alpaca_watchlist(self):
-        watch_list = self.alpaca_interface.get_watchlists()
-        stocks = []
-        rows = self.alpaca_interface.get_watchlist(watch_list[0].id)
-        for row in rows.assets:
-            stocks.append(row['symbol'])
-        return stocks
-
     def sync_alpaca_to_local_watchlist(self, stocks):
         self.watchlist_repository.update_watchlist(stocks)
 
@@ -49,7 +41,7 @@ class WatchListView:
         self.polygon_interface = PolygonInterface()
         self.watchlist_repository = WatchlistRepository()
 
-        self.sync_alpaca_to_local_watchlist(self.get_alpaca_watchlist())
+        self.sync_alpaca_to_local_watchlist(self.alpaca_interface.get_stocks_in_alpaca_watchlist())
         self.data = self.make_table()
         headings = [str(self.data[0][x]) for x in range(len(self.data[0]))]
 
