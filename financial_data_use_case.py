@@ -12,7 +12,7 @@ from ticker_repository import TickerRepository
 polygon = PolygonInterface()
 
 class FinancialDataUseCase:
-    def __init__(self) -> None:
+    def __init__(self):
         self._ticker_repo = TickerRepository()
         self._financial_statement_repo = FinancialStatementRepository()
         self._company_repo = CompanyRepository()
