@@ -2,9 +2,10 @@
     "python.linting.pylintEnabled": true,
     // "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
-    "python.linting.mypyEnabled": true
-    // "python.analysis.extraPaths": ["./"],
-    // "python.autoComplete.extraPaths": [
-    //     "./"
-    // ]
+    "python.linting.mypyEnabled": true,
+    "python.pythonPath": "/Users/jiun0507/.local/share/virtualenvs/TradeMasterMarius-cPFPMSBd/bin/python",
+    "python.analysis.extraPaths": ["./"],
+    "python.autoComplete.extraPaths": [
+        "./"
+    ]
 }

@@ -2,7 +2,7 @@ import threading
 import time
 from datetime import timedelta
 
-from alpaca_interface import AlpacaInterface, PolygonInterface
+# from Interface.alpaca_interface import AlpacaInterface, PolygonInterface
 from company_repository import CompanyRepository
 from financial_statement_repository import FinancialStatementRepository
 from job import Job

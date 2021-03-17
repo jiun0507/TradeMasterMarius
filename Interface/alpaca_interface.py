@@ -1,9 +1,9 @@
 import alpaca_trade_api as tradeapi
+from accountant import Accountant
 
 
 class PolygonInterface:
     def __init__(self, accountant):
-
         self.api = tradeapi.REST(
             accountant.alpaca_api_id,
             accountant.alpaca_key,
@@ -19,51 +19,56 @@ class PolygonInterface:
         )
         return financial_statement["results"]
 
-    # def get_polygon_ticker_symbols(self, pages, perpage=50):
-    #     params = {
-    #         "market": "STOCKS",
-    #         "page": pages,
-    #         # 'perpage': perpage,
-    #         "active": "true",
-    #     }
-    #     data = self.api.polygon.get(
-    #         path="/reference/tickers", params=params, version="v2"
-    #     )
-    #     tickers = data["tickers"]
-    #     return tickers
 
-    # def get_polygon_company_info(self, symbol):
-    #     try:
-    #         company_detail = self.api.polygon.get(
-    #             path=f"/meta/symbols/{symbol}/company", version="v1"
-    #         )
-    #     except:
-    #         return None
-    #     return company_detail
+polygon = PolygonInterface(Accountant())
 
-    # def get_snapshot_of_tickers(self):
+result = polygon.get_polygon_financial_statement("TSLA", 0)
+print(result)
+# def get_polygon_ticker_symbols(self, pages, perpage=50):
+#     params = {
+#         "market": "STOCKS",
+#         "page": pages,
+#         # 'perpage': perpage,
+#         "active": "true",
+#     }
+#     data = self.api.polygon.get(
+#         path="/reference/tickers", params=params, version="v2"
+#     )
+#     tickers = data["tickers"]
+#     return tickers
 
-    #     return self.api.polygon.get(
-    #         path=f"/snapshot/locale/us/markets/stocks/tickers", version="v2"
-    #     )
+# def get_polygon_company_info(self, symbol):
+#     try:
+#         company_detail = self.api.polygon.get(
+#             path=f"/meta/symbols/{symbol}/company", version="v1"
+#         )
+#     except:
+#         return None
+#     return company_detail
 
-    # def get_snapshot_of_ticker(self, ticker):
+# def get_snapshot_of_tickers(self):
 
-    #     return self.api.polygon.get(
-    #         path=f"/snapshot/locale/us/markets/stocks/tickers/{ticker}", version="v2"
-    #     )
+#     return self.api.polygon.get(
+#         path=f"/snapshot/locale/us/markets/stocks/tickers", version="v2"
+#     )
 
-    # def get_last_quote_of_ticker(self, ticker):
+# def get_snapshot_of_ticker(self, ticker):
 
-    #     return self.api.polygon.get(path=f"/last_quote/stocks/{ticker}", version="v1")
+#     return self.api.polygon.get(
+#         path=f"/snapshot/locale/us/markets/stocks/tickers/{ticker}", version="v2"
+#     )
 
-    # def get_last_trade_of_ticker(self, ticker):
+# def get_last_quote_of_ticker(self, ticker):
 
-    #     return self.api.polygon.get(path=f"/last/stocks/{ticker}", version="v1")
+#     return self.api.polygon.get(path=f"/last_quote/stocks/{ticker}", version="v1")
 
-    # def get_market_status(self):
-    #     status = self.api.polygon.get(path=f"/marketstatus/now", version="v1")
-    #     return status["market"]
+# def get_last_trade_of_ticker(self, ticker):
+
+#     return self.api.polygon.get(path=f"/last/stocks/{ticker}", version="v1")
+
+# def get_market_status(self):
+#     status = self.api.polygon.get(path=f"/marketstatus/now", version="v1")
+#     return status["market"]
 
 
 # class AlpacaInterface:

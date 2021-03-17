@@ -23,6 +23,7 @@ pypika = "*"
 sqlalchemy = "*"
 pysimplegui = "*"
 holidays = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.8"
